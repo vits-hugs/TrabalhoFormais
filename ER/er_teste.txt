@@ -1,0 +1,11 @@
+lower: [a-z]
+upper: [A-Z]
+letter: [a-zA-Z]
+algarismo: [0-9]
+ano: algarismoalgarismoalgarismoalgarismo
+number: algarismo*
+altura_em_cm: [0-2]numbercm
+teste_prof: (a|b)*abb
+nome: upperlower*
+palavra: letter(letter|number)*
+virgula: ,
