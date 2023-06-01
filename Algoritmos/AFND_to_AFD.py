@@ -23,8 +23,8 @@ def afnd_to_afd(non_det_automata: AFND):
         for c in non_det_automata.alphabet:
             reach = set()
             for s in crt:
-                for s_episilon in episilon_states[s]:
-                    episilon_reach = s_episilon.transitions[c]
+                for s_episilon in episilon_states.get(s, set()):
+                    episilon_reach = s_episilon.transitions.get(c, set())
                     reach = reach.union(set(episilon_reach))
 
             reach_name = to_tuple(reach)
@@ -81,7 +81,7 @@ def get_epsilon_states(non_det_automata: AFND) -> 'list[N_State]':
             if not i.name in done:
                 done[i.name] = True
                 episilon_state.append(i)
-                to_check += list(i.transitions['&'])
+                to_check += list(i.transitions.get('&', set()))
             
 
         new_states[state.name] = set(episilon_state)
@@ -94,13 +94,13 @@ if __name__ == "__main__":
     q0 = N_State("q0", {"a":{"q1"},
                         "b":{"q0", "q1"},
                         "&":{"q1"}})
-    q1 = N_State("q1", {"a":{},
-                        "b":{},
-                        "&":{"q2"}})
+    q1 = N_State("q1", {"&":{"q2"}})
     q2 = N_State("q2", {"a":{"q1"},
                         "b":{"q0"},
                         "&":{"q2"}})
     bosta_do_joao = AFND("q0", {'a', 'b'}, {"q0":q0, "q1":q1, "q2":q2}, {"q1"})
+    res = afnd_to_afd(bosta_do_joao)
+    print(bosta_do_joao)
 
     test = AFNDReader.read("AFND/epsilon.afnd")
     test.print()
