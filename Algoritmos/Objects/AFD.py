@@ -8,10 +8,13 @@ class D_State:
         return self.transitions.get(key, None)
 
 class AFD:
-    def __init__(self, initial_state_name: str, alfabet: 'set[str]', transition_table: 'dict[str, D_State]' = {}):
+    def __init__(self, initial_state_name: str, alphabet: 'set[str]',
+                 transition_table: 'dict[str, D_State]' = {}, final_states={}):
+
         self.initial_state_name = initial_state_name
-        self.alfabet = alfabet
+        self.alphabet = alphabet
         self.transition_table = transition_table
+        self.final_states = final_states
 
     def getToken(self, string, begin: int):
         reading_index = begin
@@ -30,30 +33,32 @@ class AFD:
                 break
 
             char = string[reading_index]
-            #if char not in self.alfabet and char not in config.WHITESPACES:
-                # raise CharNotInAlfabet(char)
+            #if char not in self.alphabet and char not in config.WHITESPACES:
+                # raise CharNotInalphabet(char)
             current_state_name = self.transition_table[current_state_name][char]
             reading_index += 1
 
         if foward == begin: foward += 1
         return token, foward
 
-    def print(self):
+    def __str__(self):
         # Número de estados
-        print(len(self.transition_table))
+        to_print = []
+        to_print.append(f"Número de estados = {len(self.transition_table)}")
 
         # Estado inicial
-        print(self.initial_state_name)
+        to_print.append(f"Estado inicial = {self.initial_state_name}")
 
         # Estados finais
-        end_states = []
-        for _, state in self.transition_table.items():
-            if state.token_type != None:
-                end_states.append(state.name)
-        print(','.join(end_states))
+        # end_states = []
+        # for _, state in self.transition_table.items():
+        #     if state.token_type != None:
+        #         end_states.append(state.name)
+        # print(','.join(end_states))
+        to_print.append(f"Estados finais = {self.final_states}")
 
-        # Alfabeto
-        print(','.join(self.alfabet))
+        # alphabeto
+        to_print.append("Alfabeto = " + ','.join(self.alphabet))
 
         # Transições
         all_transitions = []
@@ -61,4 +66,6 @@ class AFD:
             for char, dest_state in state.transitions.items():
                 all_transitions.append((key, char, dest_state))
         for transition in all_transitions:
-            print(transition[0], transition[1], transition[2], sep=',')
+            to_print.append(str((transition[0], transition[1], transition[2])))
+
+        return '\n'.join(to_print)

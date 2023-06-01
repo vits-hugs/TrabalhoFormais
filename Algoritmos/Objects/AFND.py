@@ -1,18 +1,21 @@
 class N_State:
+
     def __init__(self, name: str, transitions: 'dict[str, set]' = {}, token_type: str = None):
         self.name = name
         self.transitions = transitions
         self.token_type = token_type
+
 
     def __getitem__(self, key: str):
         return self.transitions.get(key, set())
 
 
 class AFND:
-    def __init__(self, initial_state_name: str, alfabet: 'set[str]', transition_table: 'dict[str, N_State]' = {}):
+    def __init__(self, initial_state_name: str, alphabet: 'set[str]', transition_table: 'dict[str, N_State]' = {}, final_states = {}):
         self.initial_state_name = initial_state_name
-        self.alfabet = alfabet
+        self.alphabet = alphabet
         self.transition_table = transition_table
+        self.final_states = final_states
 
     def print(self):
         # Número de estados
@@ -28,8 +31,8 @@ class AFND:
                 end_states.append(state.name)
         print(','.join(end_states))
 
-        # Alfabeto
-        print(','.join(self.alfabet))
+        # alphabeto
+        print(','.join(self.alphabet))
 
         # Transições
         all_transitions = []
