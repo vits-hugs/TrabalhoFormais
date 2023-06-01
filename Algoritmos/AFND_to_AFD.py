@@ -1,5 +1,6 @@
 from Objects.AFND import *
 from Objects.AFD import *
+import AFNDReader
 
 def afnd_to_afd(non_det_automata: AFND):
 
@@ -57,13 +58,13 @@ def afnd_to_afd(non_det_automata: AFND):
     print(afd)
 
             
-def to_tuple(state_set:set[str]):
+def to_tuple(state_set:'set[str]'):
     state_list = list(state_set)
     state_list.sort()
     return tuple(state_list)
 
 
-def get_epsilon_states(non_det_automata: AFND) -> list[N_State]:
+def get_epsilon_states(non_det_automata: AFND) -> 'list[N_State]':
     new_states = {}
 
     for _, state in non_det_automata.transition_table.items():
@@ -99,7 +100,11 @@ if __name__ == "__main__":
     q2 = N_State("q2", {"a":{"q1"},
                         "b":{"q0"},
                         "&":{"q2"}})
-    test = AFND("q0", {'a', 'b'}, {"q0":q0, "q1":q1, "q2":q2}, {"q1"})
+    bosta_do_joao = AFND("q0", {'a', 'b'}, {"q0":q0, "q1":q1, "q2":q2}, {"q1"})
+
+    test = AFNDReader.read("AFND/epsilon.afnd")
+    test.print()
+
     afnd_to_afd(test)
         
             
