@@ -1,6 +1,6 @@
 from Objects.AFND import *
 from Objects.AFD import *
-import AFNDReader
+import Readers.AFNDReader as AFNDReader
 
 def afnd_to_afd(non_det_automata: AFND):
 
