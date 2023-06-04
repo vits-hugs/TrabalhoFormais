@@ -35,10 +35,11 @@ def read(s):
             transitions[nome] = AFND.N_State(nome,{char:estado_chegada}) 
     text.close()
 
-    return AFND.AFND(Estado_inicial,alfabeto,transitions)
+    return AFND.AFND(Estado_inicial,alfabeto,transitions,set(Estados_finais))
 
 
 
 if __name__ == '__main__':
     d = read("AFND/epsilon.afnd")
+    d.print()
     print(d.alphabet)

@@ -3,4 +3,4 @@ teste1: (a|b)a
 teste2: ab(abc|(cd))
 teste3: a*ba(c|d)
 
-teste_prof: a(a|b)*abb       
+teste_prof: (a|b)*abb     

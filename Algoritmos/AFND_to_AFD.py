@@ -98,9 +98,9 @@ if __name__ == "__main__":
     q2 = N_State("q2", {"a":{"q1"},
                         "b":{"q0"},
                         "&":{"q2"}})
-    bosta_do_joao = AFND("q0", {'a', 'b'}, {"q0":q0, "q1":q1, "q2":q2}, {"q1"})
-    res = afnd_to_afd(bosta_do_joao)
-    print(bosta_do_joao)
+    afnd = AFND("q0", {'a', 'b'}, {"q0":q0, "q1":q1, "q2":q2}, {"q1"})
+    res = afnd_to_afd(afnd)
+    print(afnd)
 
     test = AFNDReader.read("AFND/epsilon.afnd")
     test.print()

@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class D_State:
     def __init__(self, name: str, transitions: 'dict[str, str]' = {}, token_type: str = None):
         self.name = name
@@ -6,6 +9,9 @@ class D_State:
 
     def __getitem__(self, key):
         return self.transitions.get(key, None)
+    
+    def __setitem__(self,key,value):
+        self.transitions[key] = value
 
 class AFD:
     def __init__(self, initial_state_name: str, alphabet: 'set[str]',
