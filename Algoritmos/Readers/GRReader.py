@@ -17,7 +17,7 @@ def read(s):
     
     x = text.readline().rstrip().replace(' ','').split('->')
     inital_simbol = x[0]
-    n_terminais = set()
+    terminais = set()
     while True:
         if x == ['']:
             break
@@ -26,7 +26,7 @@ def read(s):
         productions[x[0]] = result_production
 
         for i in result_production:
-            [n_terminais.add(x) for x in i]
+            [terminais.add(x) for x in i]
 
 
         x = text.readline().rstrip().replace(' ','').split('->')
@@ -35,9 +35,9 @@ def read(s):
 
     text.close()
 
-    n_terminais.difference_update(productions.keys())
-    n_terminais.difference_update('&')
-    return Grammar(inital_simbol,n_terminais,productions)
+    terminais.difference_update(productions.keys())
+    terminais.difference_update('&')
+    return Grammar(inital_simbol,terminais,productions)
 
 
 if __name__ == '__main__':
