@@ -1,6 +1,3 @@
-from typing import Any
-
-
 class D_State:
     def __init__(self, name: str, transitions: 'dict[str, str]' = {}, token_type: str = None):
         self.name = name
@@ -21,6 +18,19 @@ class AFD:
         self.alphabet = alphabet
         self.transition_table = transition_table
         self.final_states = final_states
+
+    def remove_state(self, name:str):
+        if name in self.final_states:
+            self.final_states.remove(name)
+
+        self.transition_table.pop(name)
+        for state in self.transition_table.values():
+            to_remove = []
+            for c, s in state.transitions.items():
+                if s == name:
+                    to_remove.append(c)
+            for i in to_remove:
+                state.transitions.pop(i)
 
     def getToken(self, string, begin: int):
         reading_index = begin

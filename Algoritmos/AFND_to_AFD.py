@@ -2,7 +2,7 @@ from Objects.AFND import *
 from Objects.AFD import *
 import Readers.AFNDReader as AFNDReader
 
-def afnd_to_afd(non_det_automata: AFND):
+def afnd_to_afd(non_det_automata: AFND) -> AFD:
 
     episilon_states = get_epsilon_states(non_det_automata)
 
@@ -55,7 +55,8 @@ def afnd_to_afd(non_det_automata: AFND):
         d_states_dict[d.name] = d
 
     afd = AFD(names_dict[new_initial_tuple], non_det_automata.alphabet, d_states_dict, new_final) 
-    print(afd)
+    afd.remove_state('')
+    return afd
 
             
 def to_tuple(state_set:'set[str]'):
@@ -69,12 +70,13 @@ def get_epsilon_states(non_det_automata: AFND) -> 'list[N_State]':
 
     for _, state in non_det_automata.transition_table.items():
         episilon_state = [state]
-        if not '&' in state.transitions:
-            continue
+        # if not '&' in state.transitions:
+
+        #     continue
 
         #  BFS
         done = {}
-        to_check = list(state.transitions['&'])
+        to_check = list(state.transitions.get('&', []))
         while(len(to_check) > 0):
             i = non_det_automata.transition_table[to_check[0]]
             to_check.pop(0)

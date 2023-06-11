@@ -26,6 +26,10 @@ def read(s):
         x = text.readline().rstrip().split(',')
         if x == ['']:
             break
+        # Estado que nao chega em nenhum outro
+        if len(x) == 1:
+            transitions[x[0]] = AFND.N_State(x[0], {})
+            continue
         
         nome,char,estado_chegada = x 
         estado_chegada = set(estado_chegada.split('-'))
