@@ -21,9 +21,6 @@ class Grammar:
                     else:
                         self.productions[key].append(prod[1:])
 
-
-
-    
     def __str__(self):
         Is = f"Simbolo Inicial {self.initial_symbol} \n"
         Terminais = str(self.terminais) + '\n'

@@ -31,8 +31,6 @@ def read(s):
 
         x = text.readline().rstrip().replace(' ','').split('->')
 
-
-
     text.close()
 
     terminais.difference_update(productions.keys())

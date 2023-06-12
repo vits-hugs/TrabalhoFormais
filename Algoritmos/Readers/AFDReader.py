@@ -11,13 +11,13 @@ def read(s):
 
     N_estados = text.readline().rstrip()
     Estado_inicial = text.readline().rstrip()
-    Estados_finais = text.readline().rstrip().split(',')
-    alfabeto = text.readline().rstrip().split(',')
+    Estados_finais = {final for final in text.readline().rstrip().split(',')}
+    alfabeto = {simbol for simbol in text.readline().rstrip().split(',')}
 
-    print(N_estados)
-    print(Estado_inicial)
-    print(Estados_finais)
-    print(alfabeto)
+    # print(N_estados)
+    # print(Estado_inicial)
+    # print(Estados_finais)
+    # print(alfabeto)
 
     transitions = {}
     x = 1
@@ -33,9 +33,7 @@ def read(s):
             transitions[nome] = AFD.D_State(nome,{char:estado_chegada}) 
     text.close()
 
-    return AFD.AFD(Estado_inicial,alfabeto,transitions)
-
-
+    return AFD.AFD(Estado_inicial, alfabeto, transitions, Estados_finais)
 
 if __name__ == '__main__':
     print(read("AFND/afd.afd"))
