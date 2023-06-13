@@ -56,6 +56,17 @@ class AFD:
 
         if foward == begin: foward += 1
         return token, foward
+    
+    def computeInput(self, string):
+        current_state = self.initial_state_name
+        for char in string:
+            if char not in self.transition_table[current_state].transitions:
+                return (False, 'Morto')
+            
+            current_state = self.transition_table[current_state].transitions[char]
+        
+        recognition = (current_state in self.final_states)
+        return (recognition, current_state)
 
     def __str__(self):
         # Número de estados

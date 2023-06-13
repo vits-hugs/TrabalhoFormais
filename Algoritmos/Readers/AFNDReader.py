@@ -13,7 +13,8 @@ def read(s):
     Estado_inicial = text.readline().rstrip()
     Estados_finais = text.readline().rstrip().split(',')
     alfabeto = set(text.readline().rstrip().split(','))
-    alfabeto.remove('&')
+    if '&' in alfabeto:
+        alfabeto.remove('&')
 
     print(N_estados)
     print(Estado_inicial)

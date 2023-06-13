@@ -17,6 +17,20 @@ class AFND:
         self.transition_table = transition_table
         self.final_states = final_states
 
+    def computeInput(self, string):
+        current_states = [self.initial_state_name]
+        next_states = []
+
+        for char in string:
+            for state in current_states:
+                if char in self.transition_table[state].transitions:
+                    next_states = next_states + (list(self.transition_table[state].transitions[char]))
+        
+            current_states = next_states.copy()
+            next_states = []
+
+        return current_states
+
     def print(self):
         # Número de estados
         print(len(self.transition_table))
