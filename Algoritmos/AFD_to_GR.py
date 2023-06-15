@@ -23,8 +23,8 @@ def afd_to_gr(afd_file):
 
             # Cria uma nova cabeça de produção quando estado inicial é de aceitação
             if state[0] == afd.initial_state_name:
-                initial_simbol = state[0] + '*'
-                productions[state[0]+'*'] = ["&"] + productions[state[0]]
+                initial_simbol = state[0] + '@'
+                productions[state[0]+'@'] = [["&"],productions[state[0]]]
 
         else:
             productions[state[0]] = [transition[0] + transition[1] for transition in state[1].transitions.items()]

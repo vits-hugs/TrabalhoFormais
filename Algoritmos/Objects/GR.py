@@ -9,7 +9,7 @@ class Grammar:
 
     def add_productions(self):
         for key,value in self.productions.items():
-            if '&' in value:
+            if ['&'] in value:
                 self.nullableNT.update(key)
         
         for key,production in self.productions.items():

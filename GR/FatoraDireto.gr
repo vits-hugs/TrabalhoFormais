@@ -1,0 +1,6 @@
+a,b,c,var,=
+S-> AaC|aB
+A-> abcA|varA|varBC|&
+B->avarC|avarB
+C-> c | aaaaaaaaaaaaaaC | aaaD
+D-> b

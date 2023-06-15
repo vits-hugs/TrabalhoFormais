@@ -53,7 +53,7 @@ def treat_production(production: list,Simbolos : set):
     i = 0
     while i < len(production):
         substr = ''.join(production[i:i+lookAhead])
-        if substr in Simbolos:
+        if substr in Simbolos.union('&'):
             new_production.append(substr)
             i+=lookAhead   
             lookAhead = max_look_ahead    

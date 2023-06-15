@@ -13,10 +13,10 @@ def gr_to_afnd(afd_file):
 
     alphabet = grammar.terminais
     initial_state = grammar.initial_symbol
-    new_final_state = 'X'
+    new_final_state = '__final_state_'
     final_states = {new_final_state}
 
-    if '&' in grammar.productions[grammar.initial_symbol]:
+    if ['&'] in grammar.productions[grammar.initial_symbol]:
         final_states.add(grammar.initial_symbol)
 
     transition_table = {}
