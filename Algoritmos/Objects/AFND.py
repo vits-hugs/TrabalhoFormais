@@ -31,22 +31,19 @@ class AFND:
 
         return current_states
 
-    def print(self):
-        # Número de estados
-        print(len(self.transition_table))
+    def __str__(self):
+        to_print = []
+
+        to_print.append(f"Número de estados = {len(self.transition_table)}")
 
         # Estado inicial
-        print(self.initial_state_name)
+        to_print.append(f"Estado inicial = {self.initial_state_name}")
 
         # Estados finais
-        end_states = []
-        for _, state in self.transition_table.items():
-            if state.token_type != None:
-                end_states.append(state.name)
-        print(','.join(end_states))
+        to_print.append(f"Estados finais = {self.final_states}")
 
         # alphabeto
-        print(','.join(self.alphabet))
+        to_print.append("Alfabeto = " + ','.join(self.alphabet))
 
         # Transições
         all_transitions = []
@@ -54,5 +51,30 @@ class AFND:
             for char, dest_state in state.transitions.items():
                 all_transitions.append((key, char, dest_state))
         for transition in all_transitions:
-            print(transition[0], transition[1], sep=',', end=',')
-            print('-'.join(transition[2]))
+            to_print.append(str((transition[0], transition[1], '-'.join(transition[2]))))
+
+        return '\n'.join(to_print)
+    
+    def generate_read_file(self, name):
+        states_number = str(len(self.transition_table)) + "\n"
+        initial_state = self.initial_state_name + "\n"
+
+        final_states = ''
+        for state in self.final_states:
+            final_states += str(state) + ','
+        final_states = final_states[:-1] + "\n"
+
+        alphabet = ','.join(self.alphabet) + "\n"
+
+        all_transitions = ''
+        for key, state in self.transition_table.items():
+            for char, dest_state in state.transitions.items():
+                all_transitions += str(key) + ',' + str(char) + ',' + str('-'.join(dest_state)) + "\n"
+        
+        file = open(f"AFND/{name}", "w")
+        file.write(states_number)
+        file.write(initial_state)
+        file.write(final_states)
+        file.write(alphabet)
+        file.write(all_transitions)
+        file.close()

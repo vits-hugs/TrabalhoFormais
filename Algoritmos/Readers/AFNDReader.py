@@ -16,11 +16,6 @@ def read(s):
     if '&' in alfabeto:
         alfabeto.remove('&')
 
-    print(N_estados)
-    print(Estado_inicial)
-    print(Estados_finais)
-    print(alfabeto)
-
     transitions = {}
     x = 1
     while True:
@@ -45,6 +40,4 @@ def read(s):
 
 
 if __name__ == '__main__':
-    d = read("AFND/epsilon.afnd")
-    d.print()
-    print(d.alphabet)
+    print(read("AFND/epsilon.afnd"))

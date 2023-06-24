@@ -14,11 +14,6 @@ def read(s):
     Estados_finais = {final for final in text.readline().rstrip().split(',')}
     alfabeto = {simbol for simbol in text.readline().rstrip().split(',')}
 
-    # print(N_estados)
-    # print(Estado_inicial)
-    # print(Estados_finais)
-    # print(alfabeto)
-
     transitions = {}
     x = 1
     while True:
@@ -36,4 +31,5 @@ def read(s):
     return AFD.AFD(Estado_inicial, alfabeto, transitions, Estados_finais)
 
 if __name__ == '__main__':
-    print(read("AFND/afd.afd"))
+    afe = read("AFND/afd.afd")
+    afe.generate_read_file("afd_teste.afd")

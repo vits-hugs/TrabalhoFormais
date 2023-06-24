@@ -29,3 +29,24 @@ class Grammar:
             str_productions += f"{key} -> {value} \n"
 
         return Is + Terminais + str_productions[:-2]
+    
+    def generate_read_file(self, name):
+        str_terminais = ''
+        for simbolo in self.terminais:
+            str_terminais += str(simbolo) + ','
+        str_terminais = str_terminais[:-1] + "\n"
+
+        str_productions = ''
+        for key, value_list in self.productions.items():
+            str_productions += f"{key} -> "
+            for production in value_list:
+                for value in production:
+                    str_productions += value
+                str_productions += ' | '
+            
+            str_productions = str_productions[:-3] +'\n'
+
+        file = open(f"GR/{name}", "w")
+        file.write(str_terminais)
+        file.write(str_productions)
+        file.close()
