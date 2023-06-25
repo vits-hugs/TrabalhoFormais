@@ -14,9 +14,8 @@ class FirstCalculator:
                 if setence[0] in gr.terminais or setence[0] == '&':
                     self.first[NT].update(setence[0])
                 else:
-                    other = self.calc(setence[0],gr)
-                     
-
+                    if setence[0] != NT:
+                        other = self.calc(setence[0],gr)
                     self.first[NT].update(self.first[setence[0]].difference('&')) 
 
 class FollowCalculator:
@@ -41,7 +40,8 @@ class FollowCalculator:
             else:
                 self.follow[setence[0]].update(firstTable[setence[1]].difference('&'))
                 if setence[1] in gr.nullableNT and len(setence) > 2:
-                    new_setence = setence[0] + setence[2:]
+                    new_setence = [setence[0]]
+                    new_setence.extend(setence[2:])
                     self.follow_of_setence(cabeca,new_setence,gr,firstTable) 
         
     
