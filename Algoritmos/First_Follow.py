@@ -12,7 +12,7 @@ class FirstCalculator:
     def calc(self,NT:str,gr:Grammar):
         for setence in gr.productions[NT]:
                 if setence[0] in gr.terminais or setence[0] == '&':
-                    self.first[NT].update(setence[0])
+                    self.first[NT].update([setence[0]])
                 else:
                     if setence[0] != NT:
                         other = self.calc(setence[0],gr)
@@ -36,7 +36,7 @@ class FollowCalculator:
             return
         if setence[0] in gr.productions.keys():
             if setence[1] in gr.terminais:
-                self.follow[setence[0]].update(setence[1])
+                self.follow[setence[0]].update([setence[1]])
             else:
                 self.follow[setence[0]].update(firstTable[setence[1]].difference('&'))
                 if setence[1] in gr.nullableNT and len(setence) > 2:
@@ -54,13 +54,16 @@ class FollowCalculator:
 
 
 if __name__ == '__main__':
-   gr =  GRReader.read('GR/Follow.gr')
+   gr =  GRReader.read('GR/atividade.gr')
    print(gr)
    gr.add_productions()
    print(gr)
    calculator = FirstCalculator(gr)
    calculator.calc('S',gr)
+   print('First:')
    print(calculator.first)
+   print('-'*35)
    FoCalc = FollowCalculator(gr)
+   print('Follow')
    FoCalc.Follow(gr,calculator.first)
    print(FoCalc.follow)
