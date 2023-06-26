@@ -1,10 +1,11 @@
 
 class Grammar:
 
+
     def __init__(self,initial_symbol: str, n_terminais: str, productions : 'dict[str:list]'):
         self.initial_symbol = initial_symbol
         self.terminais = n_terminais
-        self.productions = productions
+        self.productions : dict[str,list[list[str]]] = productions 
         self.nullableNT = set()
 
     def add_productions(self):
