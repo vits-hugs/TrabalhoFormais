@@ -15,7 +15,9 @@ class FirstCalculator:
                     self.first[NT].update([setence[0]])
                 else:
                     if setence[0] != NT:
-                        other = self.calc(setence[0],gr)
+                        self.calc(setence[0],gr)
+                        if len(setence) > 1 and setence[1] in gr.productions.keys():
+                            self.calc(setence[1],gr)
                     self.first[NT].update(self.first[setence[0]].difference('&')) 
 
 class FollowCalculator:
@@ -44,19 +46,24 @@ class FollowCalculator:
                     new_setence.extend(setence[2:])
                     self.follow_of_setence(cabeca,new_setence,gr,firstTable) 
         
-    
+        self.follow_of_setence(cabeca,setence[1:],gr,firstTable)
 
     def Follow(self,gr:Grammar,firstTable: 'dict[str,set]'):
         for key,production in gr.productions.items():
             for prod in production:
                 self.follow_of_setence(key,prod,gr,firstTable)
 
-
+        for key,production in gr.productions.items():
+            for prod in production:
+                if prod[-1] in gr.productions.keys():
+                    self.follow[prod[-1]].update(self.follow[key])
+                    if prod[-1] in gr.nullableNT and len(prod)>1:
+                        self.follow_of_setence(key,prod[:-1],gr,firstTable)
 
 if __name__ == '__main__':
-   gr =  GRReader.read('GR/atividade.gr')
+   gr =  GRReader.read('GR/prova3.gr')
    print(gr)
-   gr.add_productions()
+   gr.treat_left_epsilon_productions()
    print(gr)
    calculator = FirstCalculator(gr)
    calculator.calc('S',gr)
@@ -66,4 +73,7 @@ if __name__ == '__main__':
    FoCalc = FollowCalculator(gr)
    print('Follow')
    FoCalc.Follow(gr,calculator.first)
+
+    
+
    print(FoCalc.follow)

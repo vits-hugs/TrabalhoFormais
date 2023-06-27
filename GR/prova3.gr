@@ -1,0 +1,6 @@
+c,v,f,b,e,com,;
+S -> K V C
+K -> c K | &
+V -> v V| F
+F -> f S ; F | &
+C -> b V C e | com ; C | &

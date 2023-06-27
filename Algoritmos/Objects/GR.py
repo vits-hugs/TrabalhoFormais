@@ -8,17 +8,30 @@ class Grammar:
         self.productions : dict[str,list[list[str]]] = productions 
         self.nullableNT = set()
 
-    def add_productions(self):
-        for key,value in self.productions.items():
-            if ['&'] in value:
+    def treat_left_epsilon_productions(self):
+        for key,production in self.productions.items():
+            if ['&'] in production:
                 self.nullableNT.update(key)
+        last = 0
+        while last != len(self.nullableNT):
+            last = len(self.nullableNT)
+            for key,productions in self.productions.items():
+                for production in productions:
+                    nullable = True
+                    for lex in production:
+                        if lex not in self.nullableNT:
+                            nullable = False 
+                            break 
+                    if nullable:
+                        self.nullableNT.update(key)
+
         
         for key,production in self.productions.items():
             for prod in production:
                 if prod[0] in self.nullableNT:
             
                     if len(prod) == 1:
-                        self.productions[key].append('&')
+                        self.productions[key].append(['&'])
                     else:
                         self.productions[key].append(prod[1:])
 
