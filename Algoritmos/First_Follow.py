@@ -54,7 +54,7 @@ class FollowCalculator:
 
 
 if __name__ == '__main__':
-   gr =  GRReader.read('GR/atividade.gr')
+   gr =  GRReader.read('GR/prova3.gr')
    print(gr)
    gr.add_productions()
    print(gr)
