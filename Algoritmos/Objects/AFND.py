@@ -51,7 +51,7 @@ class AFND:
             for char, dest_state in state.transitions.items():
                 all_transitions.append((key, char, dest_state))
         for transition in all_transitions:
-            to_print.append(str((transition[0], transition[1], '-'.join(transition[2]))))
+            to_print.append(f"{transition[0]} -- {transition[1]} --> {'-'.join(transition[2])}")
 
         return '\n'.join(to_print)
     
