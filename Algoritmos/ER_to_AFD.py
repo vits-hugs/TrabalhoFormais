@@ -65,7 +65,7 @@ class Er_toTree():
             return T_Node(simbolo,self.__create_tree(esquerda),self.__create_tree(direita))
 
         if s[-1] in ('*','+','?'):
-            return T_Node('*',self.__create_tree(s[:-1]))
+            return T_Node(s[-1],self.__create_tree(s[:-1]))
 
         simbolo = s[-2]
         esquerda = s[0:-2]
@@ -84,6 +84,10 @@ def nullable(node : T_Node):
         return nullable(node.left) and nullable(node.right)
     if node.type == '*':
         return True
+    if node.type == '+':
+        return False
+    if node.type == '?':
+        return True 
     
 def firstpos(node : T_Node) -> set: 
     if node.left== None and node.right == None:
@@ -97,10 +101,16 @@ def firstpos(node : T_Node) -> set:
             return firstpos(node.left).union(firstpos(node.right))
         else:
             return firstpos(node.left)
-    
+        
     if node.type == '*':
         return firstpos(node.left)
 
+    if node.type == '+':
+        return firstpos(node.left)
+    
+    if node.type == '?':
+        return firstpos(node.left)
+    
 def lastpos(node : T_Node) -> set:
     if node.left== None and node.right == None:
         return set([node.id])
@@ -115,6 +125,12 @@ def lastpos(node : T_Node) -> set:
             return lastpos(node.right)
     
     if node.type == '*':
+        return lastpos(node.left)
+    
+    if node.type == '+':
+        return lastpos(node.left)
+    
+    if node.type == '?':
         return lastpos(node.left)
     
 
@@ -136,6 +152,7 @@ class FollowPosTable:
                     self.followpos[str(pos)].update(firstpos(node.right))
                 else:
                     self.followpos[str(pos)] = firstpos(node.right)
+
         if node.type == '*':
             for pos in lastpos(node):
                 if str(pos) in self.followpos:
@@ -143,10 +160,18 @@ class FollowPosTable:
                 else:
                     self.followpos[str(pos)] = firstpos(node)
 
+        if node.type == '+':
+            for pos in lastpos(node):
+                if str(pos) in self.followpos:
+                    self.followpos[str(pos)].update(firstpos(node))
+                else:
+                    self.followpos[str(pos)] = firstpos(node)
+
+
 def nome(se:set()):
     d = list(se)
     d.sort()
-    return ''.join(map(str,d))
+    return '_'.join(map(str,d))
     
 
 def make_automata(followTable, letra_num : dict , node: T_Node):
@@ -180,10 +205,10 @@ def make_automata(followTable, letra_num : dict , node: T_Node):
 
 if __name__ == "__main__":
     d = ER_parser()
-    d.parseEr_fromFile("ER/er_example.txt")
+    d.parseEr_fromFile("ER/teste.txt")
 
     erTotree = Er_toTree()
-    tree = erTotree.create_tree(d.definitions['teste_prof'])
+    tree = erTotree.create_tree(d.definitions['4'])
     print(tree)
 
     c = FollowPosTable()
