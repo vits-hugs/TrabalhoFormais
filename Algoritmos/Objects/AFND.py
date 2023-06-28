@@ -21,15 +21,33 @@ class AFND:
     def computeInput(self, string):
         current_states = [self.initial_state_name]
         next_states = []
+        current_states = self.void_transaction(current_states)
 
         for char in string:
             for state in current_states:
                 if char in self.transition_table[state].transitions:
-                    next_states = next_states + (list(self.transition_table[state].transitions[char]))
-        
+                    next_states = list(set(next_states + (list(self.transition_table[state].transitions[char]))))
+
             current_states = next_states.copy()
+            current_states = self.void_transaction(current_states)
             next_states = []
 
+        accept = False
+        for final in self.final_states:
+            if final in current_states:
+                accept = True
+
+        return (accept, current_states)
+
+    def void_transaction(self, current_states):
+        
+        for state in current_states:
+            for transaction in list(self.transition_table[state].transitions.items()):
+                if transaction[0] == '&':
+                    new_states = list(transaction[1])
+                    current_states = list(set(current_states + self.void_transaction(new_states)))
+                    current_states = list(set(current_states + list(transaction[1])))
+        
         return current_states
 
     def __str__(self):
@@ -55,7 +73,7 @@ class AFND:
             to_print.append(f"{transition[0]} -- {transition[1]} --> {'-'.join(transition[2])}")
 
         return '\n'.join(to_print)
-    
+
     def generate_read_file(self, name):
         states_number = str(len(self.transition_table)) + "\n"
         initial_state = self.initial_state_name + "\n"

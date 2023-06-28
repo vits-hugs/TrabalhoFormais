@@ -1,3 +1,8 @@
+""""
+Algoritmo de reconhecimento AFD (afd_recognition)
+Entrada: Gramatica
+Saida: Gramatica (Sem recursão a esquerda)
+"""
 import sys
 import os
 
@@ -9,12 +14,9 @@ from Readers import AFNDReader
 from Objects import AFD
 from Objects import AFND
 
-def afd_recognition(afd_file, string):
-    afd = AFDReader.read(afd_file)
-
+def afd_recognition(afd, string):
     print(afd.computeInput(string))
-    # for state in afnd.transition_table:
-    #     print(afnd.transition_table[state].transitions)
 
 if __name__ == '__main__':
-    afd_recognition("AFND/intersection.afd", "bb")
+    afd = AFNDReader.read("AFND/teste_afnd.afnd")
+    afd_recognition(afd, "abab")

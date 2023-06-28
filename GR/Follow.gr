@@ -1,4 +1,3 @@
-S->ABC
-A->aA|&
-B->bB|ACd 
-C->cC|&
+S->SaA | A
+A->AbB|B
+B->cB|(S)|t|f

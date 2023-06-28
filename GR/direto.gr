@@ -1,0 +1,7 @@
+pastel,b,a,c,l
+S->aA|aB 
+A->bA|bC
+B-> b 
+C->pastelK|pastelX
+K-> c
+X -> l
