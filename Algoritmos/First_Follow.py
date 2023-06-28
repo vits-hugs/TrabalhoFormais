@@ -1,5 +1,6 @@
 import Readers.GRReader as GRReader
 from Objects.GR import Grammar
+import copy
 
 
 
@@ -10,6 +11,8 @@ class FirstCalculator:
            self.first[NT] = set()
         
     def calc(self,NT:str,gr:Grammar):
+        gr = copy.deepcopy(gr)
+        gr.treat_left_epsilon_productions()
         for setence in gr.productions[NT]:
                 if setence[0] in gr.terminais or setence[0] == '&':
                     self.first[NT].update([setence[0]])
@@ -49,6 +52,8 @@ class FollowCalculator:
         self.follow_of_setence(cabeca,setence[1:],gr,firstTable)
 
     def Follow(self,gr:Grammar,firstTable: 'dict[str,set]'):
+        gr = copy.deepcopy(gr)
+        gr.treat_left_epsilon_productions()
         for key,production in gr.productions.items():
             for prod in production:
                 self.follow_of_setence(key,prod,gr,firstTable)

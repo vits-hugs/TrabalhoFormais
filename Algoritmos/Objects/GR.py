@@ -6,7 +6,20 @@ class Grammar:
         self.initial_symbol = initial_symbol
         self.terminais = n_terminais
         self.productions : dict[str,list[list[str]]] = productions 
+        self.enumerated_producitons = self.__enum_prods()
         self.nullableNT = set()
+
+    def __enum_prods(self):
+        cnt = 0
+        enumerated = {}
+        for N, productions in self.productions.items() :
+            for production in productions:
+                enumerated[cnt] = (production, N)
+                cnt += 1
+        return enumerated
+
+
+
 
     def treat_left_epsilon_productions(self):
         for key,production in self.productions.items():
@@ -43,6 +56,11 @@ class Grammar:
             str_productions += f"{key} -> {value} \n"
 
         return Is + Terminais + str_productions[:-2]
+
+    def print_enums(self):
+        print("Producoes enumeradas")
+        for enum, (prod, N) in self.enumerated_producitons.items():
+            print(f"{enum} = {N} -> {''.join(prod)}")
     
     def generate_read_file(self, name):
         str_terminais = ''
