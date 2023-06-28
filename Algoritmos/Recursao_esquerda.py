@@ -1,3 +1,8 @@
+""""
+Algoritmo de recursão a esquerda Direto e indireto (indirect_recursion)
+Entrada: Gramatica
+Saida: Gramatica (Sem recursão a esquerda)
+"""
 from Objects.GR import Grammar
 from Readers.GRReader import read
 
