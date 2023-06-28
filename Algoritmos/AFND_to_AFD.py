@@ -3,7 +3,7 @@ from Objects.AFD import *
 import Readers.AFNDReader as AFNDReader
 
 def afnd_to_afd(non_det_automata: AFND) -> AFD:
-
+    # Cálcular estados*
     episilon_states = get_epsilon_states(non_det_automata)
 
     new_transition_table = {}
@@ -16,7 +16,7 @@ def afnd_to_afd(non_det_automata: AFND) -> AFD:
 
     new_initial_tuple = to_tuple(episilon_reach)
     done = {new_initial_tuple : True}
-
+    # BFS modificado para estados * apartir do novo estado inicial
     while(len(undiscovered) > 0):
         crt = undiscovered[0]
         transitions = {}
@@ -26,17 +26,20 @@ def afnd_to_afd(non_det_automata: AFND) -> AFD:
                 s_state = non_det_automata.transition_table[s]
                 episilon_reach = s_state.transitions.get(c, set())
                 episilon_reach_full = set()
+                # Para cada estado alcançado por c, adicionar estado* ao estado que é atingido
                 for i in episilon_reach:
                     names = set([s.name for s in episilon_states[i]])
                     episilon_reach_full.update(names)
                 reach = reach.union(set(episilon_reach_full))
 
+            # Tupla para hash (dicionário) 
             reach_name = to_tuple(reach)
 
             if not reach_name in done:
                 done[reach_name] = True
                 undiscovered.append(reach)
-            
+
+            # Criando strings para nomes dos estados criados
             transitions[c] = '/'.join(reach_name)
 
         crt_tuple = to_tuple(undiscovered[0])
@@ -63,13 +66,13 @@ def afnd_to_afd(non_det_automata: AFND) -> AFD:
         afd.remove_state('')
     return afd
 
-            
+# Tuplas ordenadas para hash table
 def to_tuple(state_set:'set[str]'):
     state_list = list(state_set)
     state_list.sort()
     return tuple(state_list)
 
-
+# Cálculo dos estados*
 def get_epsilon_states(non_det_automata: AFND) -> 'list[N_State]':
     new_states = {}
 

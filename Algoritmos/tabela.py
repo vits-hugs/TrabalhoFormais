@@ -8,6 +8,7 @@ class LLTable:
         self.table = self.__create_table(gr)
 
     def __create_table(self, gr:Grammar):
+        # Cálculo dos firsts e follows
         fc = FirstCalculator(gr)
         fc.calc(gr.initial_symbol, gr)
         firsts = fc.first
@@ -16,9 +17,10 @@ class LLTable:
         foCalc.Follow(gr, firsts)
         follows = foCalc.follow
 
+        # Cálculo dos firsts para cada produção
         firsts_enum = self.__get_enum_first(gr)
 
-        
+        # Preencher tabela para cada produção 
         table = {}
         for prod_num, firsts in firsts_enum.items():
             N = gr.enumerated_producitons[prod_num][1]
@@ -29,7 +31,8 @@ class LLTable:
                     has_epsilon = True
                     continue
                 crt_entries[first] = prod_num
-            
+
+            #  Caso possuir epsilon, adicionar também os follows
             if has_epsilon:
                 for f in follows[N]:
                     crt_entries[f] = prod_num
@@ -37,9 +40,10 @@ class LLTable:
             table[N] = crt_entries
         return table
 
+    # Cálculo dos firsts para cada produção
     def __get_enum_first(self, gr:Grammar):
         fc = FirstCalculator(gr)
-        fc.calc('S', gr)
+        fc.calc(gr.initial_symbol, gr)
         firsts = fc.first
         for i in gr.terminais:
             firsts[i] = set([i])
