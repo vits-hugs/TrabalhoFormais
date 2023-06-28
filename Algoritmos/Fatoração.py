@@ -1,5 +1,6 @@
 import sys
 import os
+from copy import deepcopy
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -20,6 +21,7 @@ def has_direct_non_determinism(value:str,other :str, terminais):
 
 def remove_ND_direto(grammar : GR.Grammar):
     new_productions = grammar.productions.copy()
+    modificado = False 
     for head,production in grammar.productions.items():
         remove_list = []
 
@@ -33,6 +35,7 @@ def remove_ND_direto(grammar : GR.Grammar):
                 #cprint(f"{ver}|{production[x]} : {b}")
                 
                 if b:
+                    modificado = True
                     prod = ver[:pos]
                     NT = head + "@"
                     prod.append(NT)
@@ -62,57 +65,100 @@ def remove_ND_direto(grammar : GR.Grammar):
 
 
     grammar.productions = new_productions    
+    return modificado
 
 #Gerar D_Direto 
 # Verifica se não fica infinito 
-def gera_ND_indireto(gr: GR.Grammar):
-    algo = False
-    problemas = []
-    for head,production in grammar.productions.items():
-        for prod in production:
-            if prod[0] not in grammar.terminais:
-                problemas.append(prod[0])
-    problemas = list(set(problemas))
-    print(f"problemas : {problemas}")
-    problemas.remove('C')
-    for head,production in grammar.productions.items():
-        for prob in problemas:
-            if prob != head:
-                algo = desfaz_indireto(prob,grammar.productions[prob],production)
+def remove_ND_indireto(gr: GR.Grammar):
+    # Condição 1: Gerar uma lista dos NTs cujas produções começam somente com Terminais
 
-    return algo
-def desfaz_indireto(prob,sub,production):
-    bosta = False
-    new_prod = production.copy()
-    for prod in production:
+    DST = {} # Dicionario de S
+    for key,list_production in gr.productions.items():
+        for production in list_production:
+            #Considerando apenas 1 terminal no começo
+            if production[0] in gr.terminais:
+                if key in DST:
+                    DST[key].append(production[0])
+                else:
+                    DST[key] = [production[0]]
+            else:
+                if key in DST:
+                   DST.pop(key)
+
+    print(DST)
+
+    # Condição 2: Precisa começar uma produção com Não Terminal, se alguma outra produção possuir
+    # NT no começo adiciona ele
+    # Se nenhuma outra produção começa com NT e todas suas produções começam com terminal
+    # Verificar se há intersecção entre o começo de suas produções e a produção em que ele está
+    #  
+    ret = True
+    for key,production in gr.productions.items():
+        if key not in DST:
+            problemas = find_problemas(production,gr.terminais,DST)
+            for prob in problemas:
+                ret = False
+                desfaz_indireto(prob,gr.productions[prob],production)
+    return ret 
+
+#Acha NT que podem vir a gerar ND 
+def find_problemas(productions,terminais,DST):
+    problemas = []
+    for i in range(len(productions)-1):    
+        c = prod_Terminais(productions[i],terminais)
         
-        rm = False
-        for i in range(len(prod)):
-            if prod[i] == prob:
-                bosta = True 
-                for x in range(len(sub)):
-                   
-                    resp = prod[:i]
-                    resp.extend(sub[x])
-                    resp.extend(prod[i+1:])
-                    new_prod.append(resp)
-                rm = True
-        if rm: 
-            new_prod.remove(prod)
-    production.clear()
-    production.extend(new_prod)
-    return bosta
+        for j in range(i+1,len(productions)): 
+            if c == []: # começa com NT 
+                other = prod_Terminais(productions[j],terminais)
+                if other == []:
+                    problemas.append(productions[j][0])
+                    problemas.append(productions[i][0])
+
+                if productions[i][0] in DST:
+                    if other in DST[productions[i][0]]:
+                        problemas.append(productions[i][0])
+    
+    print(f"PROBLEMAS: {problemas}")
+    return problemas
+ 
+#retorna terminais                    
+def prod_Terminais(production,terminais):
+    for i in range(len(production)):
+        if production[i] not in terminais:
+            return production[:i]
+        
+
+#Desfaz determinismo indireto
+def desfaz_indireto(prob,prob_production_list,production_list):
+    remover = []
+    for i in range(len(production_list)):
+        if prob == production_list[i][0]:
+            remover.append(i)
+            for x in prob_production_list:
+                nova =  x.copy()
+                nova.extend(production_list[i][1:])
+
+                production_list.append(nova)
+    for x in remover:
+        production_list[x] = 'APAGAR'
+    
+    while 'APAGAR' in production_list:
+        production_list.remove('APAGAR')
+    print(production_list)
+
 
 def remove_ND(gr : GR.Grammar):
     print(grammar)
     print('-'*30)
-    bosta = True 
-    for x in range(2):
-        remove_ND_direto(grammar)
-                
-        print(grammar)
+    while True:
+        modificado = remove_ND_direto(grammar)
+        old_grammar = deepcopy(grammar)
 
-        bosta = gera_ND_indireto(grammar)
+        possibleT = remove_ND_direto(grammar)
+        if not modificado and  possibleT:
+            print(old_grammar)
+            break
+     
         print(grammar)
 
 
@@ -120,13 +166,9 @@ def remove_ND(gr : GR.Grammar):
 if __name__ == '__main__':
     #REMOVER & da gramatica para simplificar
     grammar = GRReader.read("GR/ProfFatoraIndireto.gr")
-    #grammar.add_productions()
-    # print(grammar)
-    # print('-'*30)
     # remove_ND_direto(grammar)
     # print(grammar)
+    # possibleTerminals(grammar)
 
-    # gera_ND_indireto(grammar)
-    # print(grammar)
 
     remove_ND(grammar)
