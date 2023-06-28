@@ -183,7 +183,7 @@ if __name__ == "__main__":
     d.parseEr_fromFile("ER/er_example.txt")
 
     erTotree = Er_toTree()
-    tree = erTotree.create_tree(d.definitions['teste1'])
+    tree = erTotree.create_tree(d.definitions['teste_prof'])
     print(tree)
 
     c = FollowPosTable()

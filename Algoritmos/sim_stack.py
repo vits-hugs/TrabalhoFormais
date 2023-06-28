@@ -20,7 +20,7 @@ class StackEmulator:
 
         if entry[-1] != '$':
             entry.append('$')
-        stack = ['$', 'S']
+        stack = ['$', gr.initial_symbol]
         crt_entry_pos = 0
         while True:
             print(f"Pilha = {''.join(stack)}")
