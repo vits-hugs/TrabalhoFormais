@@ -10,14 +10,15 @@ class StackEmulator:
     
     # Entrada deve ser uma lista de tokens
     def emulate(self, entry:list[str]):
+        # Resgatar tabela de parsing
         gr = self.__gr
         gr.print_enums()
         table = LLTable(gr)
         print(table)
-        # hehe
         table = table.table
         enum_prods = gr.enumerated_producitons
 
+        # Iniciar stack
         if entry[-1] != '$':
             entry.append('$')
         stack = ['$', gr.initial_symbol]
@@ -29,15 +30,18 @@ class StackEmulator:
             if crt_entry_pos > len(entry) - 1:
                 print("ERROR")
                 break
-
+            
+            # Aceitar caso stack e input forem vazios
             elif crt_token == '$' and stack[-1] == '$':
                 print("Accepted!!")
                 break
-
+            
+            # Caso stack == input, deletar da stack e avançar input
             elif crt_token == stack[-1]:
                 stack.pop(-1)
                 crt_entry_pos += 1
             
+            # Caso stack for não terminal, empilhar produção
             elif stack[-1] in table:
                 prod_enum = table[stack[-1]][crt_token]
                 prod = copy.deepcopy(enum_prods[prod_enum][0])
