@@ -17,4 +17,4 @@ def afd_recognition(afd_file, string):
     #     print(afnd.transition_table[state].transitions)
 
 if __name__ == '__main__':
-    afd_recognition("AFND/afd.afd", "ba")
+    afd_recognition("AFND/intersection.afd", "bb")

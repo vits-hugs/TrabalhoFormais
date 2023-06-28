@@ -9,7 +9,7 @@ class LLTable:
 
     def __create_table(self, gr:Grammar):
         fc = FirstCalculator(gr)
-        fc.calc('S', gr)
+        fc.calc(gr.initial_symbol, gr)
         firsts = fc.first
 
         foCalc = FollowCalculator(gr)

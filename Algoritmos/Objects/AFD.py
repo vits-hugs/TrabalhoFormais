@@ -1,3 +1,4 @@
+from os import path
 class D_State:
     def __init__(self, name: str, transitions: 'dict[str, str]' = {}, token_type: str = None):
         self.name = name
@@ -86,7 +87,7 @@ class AFD:
             for char, dest_state in state.transitions.items():
                 all_transitions.append((key, char, dest_state))
         for transition in all_transitions:
-            to_print.append(str((transition[0], transition[1], transition[2])))
+            to_print.append(f"{transition[0]} -- {transition[1]} --> {transition[2]}")
 
         return '\n'.join(to_print)
     
@@ -105,8 +106,7 @@ class AFD:
         for key, state in self.transition_table.items():
             for char, dest_state in state.transitions.items():
                 all_transitions += str(key) + ',' + str(char) + ',' + str(dest_state) + "\n"
-        
-        file = open(f"AFND/{name}", "w")
+        file = open(path.join("Gerados","Automatos",name), "w")
         file.write(states_number)
         file.write(initial_state)
         file.write(final_states)

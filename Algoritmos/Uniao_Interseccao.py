@@ -57,11 +57,8 @@ def intersection(afd1:AFD, afd2:AFD) -> AFD:
     return union_afd
 
 if __name__ == "__main__":
-    q0 = D_State("q0", {"a":"q1"})
-    q1 = D_State("q1", {"a":"q1"})
-    afd1 = AFD("q0", {"a"}, {"q0":q0, "q1":q1}, {"q1"})
-    q02 = D_State("q0", {"b":"q1"})
-    q12 = D_State("q1", {"b":"q1"})
-    afd2 = AFD("q0", {"b"}, {"q0":q02, "q1":q12}, {"q1"})
-    union_afd = intersection(afd1, afd2)
-    print(union_afd)
+    afd1 = AFDReader.read("AFND/inicia_com_a.afd")
+    afd2 = AFDReader.read("AFND/termina_com_b.afd")
+    intersection_afd = intersection(afd1, afd2)
+    intersection_afd.generate_read_file("intersection.afd")
+    print(intersection_afd)
