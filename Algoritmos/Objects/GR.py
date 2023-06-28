@@ -1,4 +1,4 @@
-
+from os import path 
 class Grammar:
 
 
@@ -78,7 +78,7 @@ class Grammar:
             
             str_productions = str_productions[:-3] +'\n'
 
-        file = open(f"GR/{name}", "w")
+        file = open(path.join("Gerados","Gramaticas",name), "w")
         file.write(str_terminais)
         file.write(str_productions)
         file.close()
