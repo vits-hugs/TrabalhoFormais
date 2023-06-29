@@ -8,6 +8,8 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from Readers import GRReader
 from Objects import GR
 
+#Verifica se existe ND direto
+#Caso tenha, retorna a posição x do NT que causa o ND
 def has_direct_non_determinism(value:str,other :str, terminais):
     if is_only_terminals(other,terminais):
         return False,-1
@@ -35,16 +37,16 @@ def remove_ND_direto(grammar : GR.Grammar):
 
         i = 0 
         tam = len(production)
-
         while i < len(production)-1:
             ver = production[i]
             for x in range(i+1, tam):
-                b,pos = has_direct_non_determinism(ver,production[x],grammar.terminais)
+                ND,pos = has_direct_non_determinism(ver,production[x],grammar.terminais)
                 
-                if b:
+                #Se houver ND realiza a Determinização
+                if ND:
                     modificado = True
                     prod = ver[:pos]
-                    NT = head + "@"
+                    NT = head + "@" 
                     prod.append(NT)
                 
                     new_productions[head].append(prod)
@@ -59,8 +61,7 @@ def remove_ND_direto(grammar : GR.Grammar):
                         new_productions[NT] = []
                         new_productions[NT].append(ar_ver)
                         new_productions[NT].append(ar_prod)
-                       
-
+                    
                     remove_list.append(ver)
                     remove_list.append(production[x])
 
@@ -72,21 +73,20 @@ def remove_ND_direto(grammar : GR.Grammar):
 
 
     grammar.productions = new_productions    
-    return modificado
+    return modificado #Se True se foi modificado False se não
 
 #Gerar D_Direto 
-# Verifica se não fica infinito 
 def remove_ND_indireto(gr: GR.Grammar):
     # Condição 1: Gerar uma lista dos NTs cujas produções começam somente com Terminais
 
     DCT = {} # Dicionario produções com Terminais
     for key,list_production in gr.productions.items():
         for production in list_production:
-            #Considerando apenas 1 terminal no começo
+            #Retorna inicio da produção até NT
             terminais,B = prod_Terminais(production,gr.terminais)
             if production[0] in gr.terminais:
                 if key in DCT:
-                    DCT[key].extend(terminais) #TODO por prod_terminais
+                    DCT[key].extend(terminais) 
                 else:
                     
                     DCT[key] = terminais
@@ -104,7 +104,8 @@ def remove_ND_indireto(gr: GR.Grammar):
     ret = True
     for key,production in gr.productions.items():
         if key not in DCT:
-            problemas = find_problemas(production,gr.terminais,DCT)
+            problemas = find_problemas(production,gr.terminais,DCT) 
+            #problemas são NT que podem vir a gerar ND
             for prob in problemas:
                 desfaz_indireto(prob,gr.productions[prob],production)
             #Se problemas foram encontrados
@@ -166,8 +167,7 @@ def can_generate_ND(A_list:list[str],Other_list:list[str]):
                 return True
     return False
 
-#retorna terminais 
-# Cuidar se haver somente terminais                    
+#retorna terminais , retorna True se não haver NT              
 def prod_Terminais(production,terminais):
     for i in range(len(production)):
         if production[i] not in terminais:
@@ -192,11 +192,17 @@ def desfaz_indireto(prob,prob_production_list,production_list):
     while 'APAGAR' in production_list:
         production_list.remove('APAGAR')
 
-
-#FAZER PILHA PARA RETORNAR "MELHOR GRAMATICA"
-def remove_ND(gr : GR.Grammar):
+#Aplica remoção de ND_direto e depois remoção de ND_indireto
+#Para somente se não houver mais possibilidade de ND_Indireto
+#E todos os ND_Diretos foram tratados
+def remove_ND(gr : GR.Grammar,limit = 1e3):
+    gr.remove_epsilon()
     pilha_gr = [deepcopy(gr)]
+    i = 0
     while True:
+        i+=1
+        if i > limit:
+            raise Exception(f"""LIMITE DE ITERAÇÕES: {limit:0.0f} ALCANÇADO PROVAVELMENTE ESSA GRAMATICA NÃO É DETERMINIZAVEL""")
         modificado = remove_ND_direto(gr)
         if modificado:
             pilha_gr.append(deepcopy(gr))
@@ -206,10 +212,9 @@ def remove_ND(gr : GR.Grammar):
         
     return pilha_gr[-1]
 
-#AINDA NÃO removi
 if __name__ == '__main__':
     from os import path 
-    GRAMMAR_PATH = path.join("Testes","GR","Testes_Fatora","indireto2.gr")
+    GRAMMAR_PATH = path.join("Testes","GR","Testes_Fatora","direto2Problema.gr")
     GRAMAR_WITHOUT_NT_FILENAME = "Gramatica_sem_ND"
     grammar = GRReader.read(GRAMMAR_PATH)
     print("Gramatica com determinismo")

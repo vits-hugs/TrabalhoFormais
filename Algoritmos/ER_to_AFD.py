@@ -9,13 +9,13 @@ from Objects.AFD import AFD,D_State
 global id 
 id = 1
 
-
+#Nodo da arvore
 class T_Node:
     def __init__(self,type,left=None,right=None) -> None:
-        self.type = type
+        self.type = type #Operador ou simbolo
         self.left = left
         self.right = right
-        self.id = -1
+        self.id = -1 #identificador que será usado para numeração dos caractereres
 
     def __str__(self):
         if self.left == None and self.right == None:
@@ -23,6 +23,7 @@ class T_Node:
 
         return '[' + self.type +':' 'L:' +str(self.left) + 'H R:' + str(self.right)   +']'
     
+#Retorna região dentro de parenteses
 def get_parent_index(s: str ):
     cont = -1 
     for i in range(len(s)-1,-1,-1):
@@ -38,26 +39,28 @@ def get_parent_index(s: str ):
 class Er_toTree():
     def __init__(self) -> None:
         self.letra_num = {}
-
+    #Gera arvore
     def create_tree(self, s: str):
         last_node = T_Node('#')
         last_node.id = -2
         return T_Node('.',self.__create_tree(s),last_node)
 
+    #função recursiva 
     def __create_tree(self,s: str):
-        if len(s) == 1: # if verify last
+        if len(s) == 1: #se for um nodo folha
             folha = T_Node(s)
             global id
             folha.id = id 
             self.letra_num[str(id)] = folha.type 
             id +=1
             return  folha 
+        # Le a string ao contrario
         if s[-1] == ')':
             index = get_parent_index(s)
 
-            simbolo = s[index -1 ]
-            esquerda = s[:index -1]
-            direita = s[1+index: -1]
+            simbolo = s[index -1 ] 
+            esquerda = s[:index -1] #Resto da expressão a esquerda
+            direita = s[1+index: -1] #Resto da expressão a direita
 
             if index == 0:
                 return self.__create_tree(direita)
@@ -68,11 +71,9 @@ class Er_toTree():
             return T_Node(s[-1],self.__create_tree(s[:-1]))
 
         simbolo = s[-2]
-        esquerda = s[0:-2]
-        direita = s[-1]
+        esquerda = s[0:-2] #Resto da expressão a esquerda
+        direita = s[-1] #Resto da expressão a direita
         return  T_Node(simbolo,self.__create_tree(esquerda),self.__create_tree(direita))
-
-
 
 
 def nullable(node : T_Node):
@@ -138,6 +139,7 @@ class FollowPosTable:
     def __init__(self):
         self.followpos = {'-2':set()}
 
+    #Cria Tabela de FollowPos de forma recursiva
     def make_table(self,node):
         self.__followpos(node)
         if node.right:
@@ -167,7 +169,7 @@ class FollowPosTable:
                 else:
                     self.followpos[str(pos)] = firstpos(node)
 
-
+#Gera nome dos estados a partir do conjunto de numeros
 def nome(se:set()):
     d = list(se)
     d.sort()
@@ -203,16 +205,20 @@ def make_automata(followTable, letra_num : dict , node: T_Node):
     return AFD(Estado_inicial,alfabeto,Transicoes,Estado_final)
 
 def ER_to_AFD(er) -> AFD:
+    #Gera arvore
     er_to_tree = Er_toTree()
     tree = er_to_tree.create_tree(er)
 
+    #FollowPos
     FPT = FollowPosTable()
     FPT.make_table(tree)
  
     er_to_tree.letra_num['-2'] = '#'
     
+    #Cria automato
     AFD = make_automata(FPT.followpos,er_to_tree.letra_num,tree)
     return AFD
+
 if __name__ == "__main__":
     from os import path 
     ER_PATH = path.join("Testes","ER","teste.txt")

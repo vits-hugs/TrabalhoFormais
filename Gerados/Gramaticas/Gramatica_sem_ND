@@ -1,7 +1,9 @@
-b,a,c
-S -> aS@
-A -> bA@
-B -> b
-C -> c
-S@ -> A | B
-A@ -> B | C
+c,=,var,b,a
+S -> varA@aC | aS@
+A -> abcA | varA@
+B -> avarB@
+C -> caaaaaaaaaaaaaaaaa | aaaaaaaaaaaaaaC | aaaD
+D -> b
+A@ -> A | BC
+B@ -> C | B
+S@ -> B | bcAaC

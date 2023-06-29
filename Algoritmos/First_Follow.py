@@ -6,10 +6,12 @@ import copy
 
 class FirstCalculator:
     def __init__(self,gr:Grammar):
+        #inicia dicionario com todos os NT
         self.first: dict[str,set] = {}
         for NT in gr.productions.keys():
            self.first[NT] = set()
-        
+    
+    #Calcula First indo para outros NT alcançaveis
     def calc(self,NT:str,gr:Grammar):
         gr = copy.deepcopy(gr)
         gr.treat_left_epsilon_productions()
@@ -24,6 +26,7 @@ class FirstCalculator:
                     self.first[NT].update(self.first[setence[0]].difference('&')) 
 
 class FollowCalculator:
+    #inicia dicionario com todos os NT
     def __init__(self,gr:Grammar):
         self.follow: 'dict[str,set]' = {}
         for NT in gr.productions.keys():
@@ -70,7 +73,8 @@ if __name__ == '__main__':
    GRAMMAR_PATH = path.join("Testes","GR","prova3.gr")
    gr =  GRReader.read(GRAMMAR_PATH)
 
-   gr.treat_left_epsilon_productions()
+   gr.treat_left_epsilon_productions() #Trata todas as epsilon produções
+
 
    First_calculator = FirstCalculator(gr)
    First_calculator.calc(gr.initial_symbol,gr)
@@ -82,5 +86,5 @@ if __name__ == '__main__':
 
    print('Follow')
    Follow_calculator.Follow(gr,First_calculator.first)
-   for key,value in First_calculator.first.items():
+   for key,value in Follow_calculator.follow.items():
         print(f"Follow({key}) : {value}")
