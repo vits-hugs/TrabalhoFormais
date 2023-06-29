@@ -35,7 +35,11 @@ def get_parent_index(s: str ):
             else:
                 cont -=1 
 
-
+def get_parent_close(s:str):
+    for i in range(len(s)-1,-1,-1):
+        if s[i] == '(':
+            return i
+    return -1
 class Er_toTree():
     def __init__(self) -> None:
         self.letra_num = {}
@@ -68,8 +72,18 @@ class Er_toTree():
             return T_Node(simbolo,self.__create_tree(esquerda),self.__create_tree(direita))
 
         if s[-1] in ('*','+','?'):
+            if len(s)>2 and  s[-3] in ('|','.'):
+                no = T_Node(s[-1],self.__create_tree(s[-2]))
+                return T_Node(s[-3],self.__create_tree(s[:-3]),no)
+            
+            if s[-2] == ')':
+                ind = get_parent_close(s[:-2])
+                no = T_Node(s[-1],self.__create_tree(s[ind+1:-2]))
+                
+                return T_Node(s[ind-1],self.__create_tree(s[:ind-1]) ,no) 
             return T_Node(s[-1],self.__create_tree(s[:-1]))
-
+            
+            
         simbolo = s[-2]
         esquerda = s[0:-2] #Resto da expressão a esquerda
         direita = s[-1] #Resto da expressão a direita
