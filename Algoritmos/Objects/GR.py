@@ -18,6 +18,11 @@ class Grammar:
                 cnt += 1
         return enumerated
 
+    def remove_epsilon(self):
+        for key,production in self.productions.items():
+            if ['&'] in production:
+                production.remove(['&'])
+
     def treat_left_epsilon_productions(self):
         for key,production in self.productions.items():
             if ['&'] in production:
