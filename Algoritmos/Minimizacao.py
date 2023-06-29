@@ -5,7 +5,9 @@ import Readers.AFNDReader as AFNDReader
 import copy
 
 def get_min(afd:AFD) -> AFD:
+    # Remover mortos
     remove_deads(afd)
+    # Dividir estados em finais e não finais
     non_final = [state for name,state in afd.transition_table.items() if not name in afd.final_states]
     final = [state for name,state in afd.transition_table.items() if name in afd.final_states]
     crt_equivalents = [final, non_final]
@@ -14,6 +16,7 @@ def get_min(afd:AFD) -> AFD:
     changed = True
     while changed:
         changed = False
+        # Criar novos grupos para cada (G, C, E), ou seja, Grupo(G) por C chega no estado E
         for c in afd.alphabet:
             new_equivalents = {}
             for index, equis in enumerate(crt_equivalents):
@@ -24,12 +27,14 @@ def get_min(afd:AFD) -> AFD:
                     new_equis.append(state)
                     new_equivalents[(index, c, reach)] = new_equis
             if len(new_equivalents) != len(crt_equivalents):
+                # Caso mudanças não aconteçam, loop para
                 changed = True
 
             new_equivalents = list(new_equivalents.values())
             crt_equivalents = new_equivalents
             crt_equivalents_reverse = get_reversed_equivalents(crt_equivalents)
 
+    # Criando automato novo sem estados equivalentes
     initial = afd.initial_state_name
     crt_equivalents.pop(crt_equivalents_reverse[initial])
     new_states = [copy.deepcopy(afd.transition_table[initial])] + [copy.deepcopy(i[0]) for i in crt_equivalents]
@@ -40,6 +45,7 @@ def get_min(afd:AFD) -> AFD:
     min_afd = AFD(initial, afd.alphabet, transitions, final_states)
     return min_afd
 
+# Tabela de estados equivalentes invertida para acesso em tempo constante
 def get_reversed_equivalents(crt_equivalents: list[list[D_State]]):
     reversed = {}
     for index, i in enumerate(crt_equivalents):

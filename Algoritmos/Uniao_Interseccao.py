@@ -7,23 +7,30 @@ import copy
 def union(afd1:AFD, afd2:AFD) -> AFD:
     afd1 = add_sufix(afd1, "1-")
     afd2 = add_sufix(afd2, "2-")
+
+    # Transformação de AFD para AFND
     new_states = []
     for state in afd1.transition_table.values():
         new_states.append(N_State(state.name, state.transitions))
     for state in afd2.transition_table.values():
         new_states.append(N_State(state.name, state.transitions))
     
+    # Adicionar estado novo e transição por epsilon para estados iniciais
     new_states.append(N_State('*', {'&':{afd2.initial_state_name, afd1.initial_state_name}}))
 
     new_transition_table = {}
     for s in new_states:
         new_transition_table[s.name] = s
 
+    # Estados finais novos, união dos estados finais antigos
     new_finals = afd1.final_states.union(afd2.final_states)
 
     afnd = AFND('*', afd1.alphabet.union(afd2.alphabet), new_transition_table, new_finals)
+
+    # Converção para afd
     return afnd_to_afd(afnd)
 
+# Adiciona determinado sufixo a todos os estados do autômato
 def add_sufix(afd:AFD, sufix):
     copy_afd = copy.deepcopy(afd)
     new_transitions = {}
@@ -39,9 +46,12 @@ def add_sufix(afd:AFD, sufix):
     return copy_afd
 
 def intersection(afd1:AFD, afd2:AFD) -> AFD:
+    # Faz a união entre os autômatos
     union_afd = union(afd1, afd2)
     afd1 = add_sufix(afd1, "1-")
     afd2 = add_sufix(afd2, "2-")
+
+    # Contrução dos novos estados finais, estados finais de ambos afd1 e afd2
     finals = set()
     for name in union_afd.transition_table.keys():
         has_1, has_2 = False, False
