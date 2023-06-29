@@ -121,5 +121,5 @@ class ER_parser:
 
 if __name__ == '__main__':
     d = ER_parser()
-    d.parseEr_fromFile("ER/er_teste.txt")
+    d.parseEr_fromFile("Testes/ER/er_teste.txt")
     print(d.definitions)

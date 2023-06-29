@@ -31,5 +31,5 @@ def read(s):
     return AFD.AFD(Estado_inicial, alfabeto, transitions, Estados_finais)
 
 if __name__ == '__main__':
-    afe = read("AFND/afd.afd")
-    afe.generate_read_file("afd_teste.afd")
+    afd = read("Testes/AFD/afd_1.afd")
+    print(afd)

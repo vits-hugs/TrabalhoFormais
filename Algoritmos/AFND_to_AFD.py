@@ -97,10 +97,12 @@ def get_epsilon_states(non_det_automata: AFND) -> 'list[N_State]':
 
 
 if __name__ == "__main__":
-    test = AFNDReader.read("AFND/epsilon.afnd")
-    print(test)
-
-    print(afnd_to_afd(test))
-        
+    from os import path
+    PATH_TO_AFND = path.join("Testes","AFD","epsilon.afnd")
+    AFD_FILENAME = "AFD_de_AFND"
+    AFND = AFNDReader.read(PATH_TO_AFND)
+    AFD = afnd_to_afd(AFND)
+    print(AFD)
+    AFD.generate_read_file(AFD_FILENAME)        
             
 

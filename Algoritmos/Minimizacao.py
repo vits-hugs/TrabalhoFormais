@@ -71,9 +71,13 @@ def remove_deads(afd:AFD):
     for i in to_remove:
         afd.remove_state(i)
 if __name__ == "__main__":
-    afnd = AFNDReader.read("AFND/min_afnd_test.afnd")
+    from os import path 
+    AFND_PATH = path.join("Testes","AFD","min_afnd_test.afnd")
+    AFD_MINIMIZADO_FILENAME = "AFD_minimizado"
+    afnd = AFNDReader.read(AFND_PATH)
     afd = afnd_to_afd(afnd)
     print(afd)
-    min_afd = get_min(afd)
-    print("---------------------------------------")
-    print(min_afd)
+    afd_minimizado = get_min(afd)
+    print("-"*30)
+    print(afd_minimizado)
+    afd_minimizado.generate_read_file(AFD_MINIMIZADO_FILENAME)

@@ -1,0 +1,12 @@
+6
+S
+D/X,S,B/X,C/X
+a,c,b
+S,a,B/X
+S,b,D/X
+D/X,a,S
+B/X,b,C/X
+C/X,a,B
+C/X,b,F
+B,b,C/X
+F,a,C/X

@@ -12,7 +12,8 @@ class N_State:
 
 
 class AFND:
-    def __init__(self, initial_state_name: str, alphabet: 'set[str]', transition_table: 'dict[str, N_State]' = {}, final_states = {}):
+    def __init__(self, initial_state_name: str, alphabet: 'set[str]',
+                  transition_table: 'dict[str, N_State]' = {}, final_states = {}):
         self.initial_state_name = initial_state_name
         self.alphabet = alphabet
         self.transition_table = transition_table

@@ -40,7 +40,6 @@ def remove_ND_direto(grammar : GR.Grammar):
             ver = production[i]
             for x in range(i+1, tam):
                 b,pos = has_direct_non_determinism(ver,production[x],grammar.terminais)
-                #print(f"{ver}|{production[x]} : {b}")
                 
                 if b:
                     modificado = True
@@ -145,7 +144,6 @@ def find_problemas(productions,terminais,DCT : dict[str,list]):
                if can_generate_ND(T_Lists,OT_Lists):
                    problemas.append(NT)
       
-    print(f"PROBLEMAS: {problemas}")
     return problemas
 
 
@@ -205,16 +203,18 @@ def remove_ND(gr : GR.Grammar):
         possibleT = remove_ND_indireto(gr)
         if not modificado and  possibleT:
             break
-        print(gr)
         
     return pilha_gr[-1]
 
-
+#AINDA NÃO removi
 if __name__ == '__main__':
-    #REMOVER & da gramatica para simplificar
-    grammar = GRReader.read("GR/Testes_Fatora/indireto2.gr")
+    from os import path 
+    GRAMMAR_PATH = path.join("Testes","GR","Testes_Fatora","indireto2.gr")
+    GRAMAR_WITHOUT_NT_FILENAME = "Gramatica_sem_ND"
+    grammar = GRReader.read(GRAMMAR_PATH)
+    print("Gramatica com determinismo")
     print(grammar)
-
-    L = remove_ND(grammar)
+    new_grammar = remove_ND(grammar)
     print("RESULTADO:")
-    print(L)
+    print(new_grammar)
+    new_grammar.generate_read_file(GRAMAR_WITHOUT_NT_FILENAME)

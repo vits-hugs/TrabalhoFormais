@@ -59,7 +59,10 @@ class StackEmulator:
         
 
 if __name__ == "__main__":
-    gr =  GRReader.read('GR/prova3.gr')
-    entry = "c v f com ; b e ; b e".split()
+    from os import path
+    GRAMMAR_PATH = path.join("Testes","GR","prova3.gr")
+    ENTRADA = "c v f com ; b e ; b e"
+    SEPARADOR = " "
+    gr =  GRReader.read(GRAMMAR_PATH)
     emulator = StackEmulator(gr)
-    emulator.emulate(entry)
+    emulator.emulate(ENTRADA.split(SEPARADOR))

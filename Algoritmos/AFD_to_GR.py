@@ -28,20 +28,25 @@ def afd_to_gr(afd: AFD):
             if state_destiny in afd.final_states:
                 final_state_transition.append(transition_state)
 
+        productions[state[0]] = [[transition[0]] + [transition[1]] for transition in state[1].transitions.items()]  
+
         # se tiver transições para o estado final incorpora na gramática
         if final_state_transition:
-                productions[state[0]] = final_state_transition + [transition[0] + transition[1] for transition in state[1].transitions.items()]
-        else:
-            productions[state[0]] = [transition[0] + transition[1] for transition in state[1].transitions.items()]
+            for final in final_state_transition:
+                productions[state[0]] = productions[state[0]] + [[final]]
 
-        # Cria uma nova cabeça de produção quando estado inicial é de aceitação
         if state[0] == afd.initial_state_name and state[0] in afd.final_states:
-            initial_simbol = state[0] + '@'
-            productions[state[0]+'@'] = [["&"],productions[state[0]]]
+            productions[state[0]] = [["&"]] + productions[state[0]]
 
     grammar = GR.Grammar(initial_simbol, terminais, productions)
     return grammar
 
 if __name__ == '__main__':
-    afd = AFDReader.read("AFND/afd_1.afd")
-    print(afd_to_gr(afd))
+    from os import path
+    PATH_TO_AFD = path.join("Testes","AFD","afd_to_gr_1.afd")
+    GR_FILENAME = "gr_de_afd"
+    
+    afd = AFDReader.read(PATH_TO_AFD)
+    gr = afd_to_gr(afd)
+    print(gr)
+    gr.generate_read_file(GR_FILENAME)

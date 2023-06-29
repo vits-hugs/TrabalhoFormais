@@ -66,19 +66,21 @@ class FollowCalculator:
                         self.follow_of_setence(key,prod[:-1],gr,firstTable)
 
 if __name__ == '__main__':
-   gr =  GRReader.read('GR/prova3.gr')
-   print(gr)
+   from os import path 
+   GRAMMAR_PATH = path.join("Testes","GR","prova3.gr")
+   gr =  GRReader.read(GRAMMAR_PATH)
+
    gr.treat_left_epsilon_productions()
-   print(gr)
-   calculator = FirstCalculator(gr)
-   calculator.calc('S',gr)
+
+   First_calculator = FirstCalculator(gr)
+   First_calculator.calc(gr.initial_symbol,gr)
    print('First:')
-   print(calculator.first)
+   for key,value in First_calculator.first.items():
+       print(f"First({key}) : {value}")
    print('-'*35)
-   FoCalc = FollowCalculator(gr)
+   Follow_calculator = FollowCalculator(gr)
+
    print('Follow')
-   FoCalc.Follow(gr,calculator.first)
-
-    
-
-   print(FoCalc.follow)
+   Follow_calculator.Follow(gr,First_calculator.first)
+   for key,value in First_calculator.first.items():
+        print(f"Follow({key}) : {value}")

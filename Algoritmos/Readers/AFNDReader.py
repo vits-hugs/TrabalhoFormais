@@ -37,7 +37,5 @@ def read(s):
 
     return AFND.AFND(Estado_inicial,alfabeto,transitions,set(Estados_finais))
 
-
-
 if __name__ == '__main__':
-    print(read("AFND/epsilon.afnd"))
+    print(read("Testes/AFD/epsilon.afnd"))

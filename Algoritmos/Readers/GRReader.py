@@ -65,4 +65,4 @@ def treat_production(production: list,Simbolos : set):
     return new_production
 
 if __name__ == '__main__':
-    print(read("GR/direto.gr"))
+    print(read("Testes/GR/direto.gr"))

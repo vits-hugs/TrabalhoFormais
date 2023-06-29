@@ -67,8 +67,22 @@ def intersection(afd1:AFD, afd2:AFD) -> AFD:
     return union_afd
 
 if __name__ == "__main__":
-    afd1 = AFDReader.read("AFND/inicia_com_a.afd")
-    afd2 = AFDReader.read("AFND/termina_com_b.afd")
+    from os import path
+    AFD1_PATH = path.join("Testes","AFD","inicia_com_a.afd")
+    AFD2_PATH = path.join("Testes","AFD","termina_com_b.afd")
+    UNION_FILENAME = "AFD_from_UNION"
+    INTERSECTION_FILENAME = "AFD_from_INTERSECTION"
+    
+    #UNIÃO
+    afd1 = AFDReader.read(AFD1_PATH)
+    afd2 = AFDReader.read(AFD2_PATH)
+    union_afd = union(afd1,afd2)
+    union_afd.generate_read_file(UNION_FILENAME)
+    print("UNIÃO")
+    print(union_afd)
+    print('-'*30)
+    #INTERSECÇÃO 
     intersection_afd = intersection(afd1, afd2)
-    intersection_afd.generate_read_file("intersection.afd")
+    intersection_afd.generate_read_file(INTERSECTION_FILENAME)
+    print("INTERSECÇÃO")
     print(intersection_afd)

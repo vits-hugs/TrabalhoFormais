@@ -48,5 +48,11 @@ def gr_to_afnd(grammar: GR):
     return afnd
 
 if __name__ == '__main__':
-    gr = GRReader.read("GR/direto.gr")
-    print(gr_to_afnd(gr))
+    from os import path 
+    GRAMMAR_PATH = path.join("Testes","GR","gr_to_afnd_1.gr")
+    AFND_FILENAME = "AFND_de_GR" 
+    
+    gr = GRReader.read(GRAMMAR_PATH)
+    AFND = gr_to_afnd(gr)
+    print(AFND)
+    AFND.generate_read_file(AFND_FILENAME)

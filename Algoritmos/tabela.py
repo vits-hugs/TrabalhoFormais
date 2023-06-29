@@ -74,9 +74,12 @@ class LLTable:
 
 
 if __name__ == "__main__":
-
-   gr =  GRReader.read('GR/prova3.gr')
+    from os import path
+    GRAMMAR_PATH = path.join("Testes","GR","prova3.gr")
+    
+    gr =  GRReader.read(GRAMMAR_PATH)
 
     
 
-   print(LLTable(gr))
+    LL_Table = LLTable(gr)
+    print(LL_Table)

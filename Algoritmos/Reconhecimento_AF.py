@@ -1,7 +1,7 @@
 """"
-Algoritmo de reconhecimento AFD (afd_recognition)
-Entrada: Gramatica
-Saida: Gramatica (Sem recursão a esquerda)
+Algoritmo de reconhecimento AFD (af_recognition)
+Entrada: (AF, cadeia_de_entrada)
+Saida: (is_aceitação, lista_estados_alcançados)
 """
 import sys
 import os
@@ -14,9 +14,19 @@ from Readers import AFNDReader
 from Objects import AFD
 from Objects import AFND
 
-def afd_recognition(afd, string):
-    print(afd.computeInput(string))
+def af_recognition(af, string):
+    print(af.computeInput(string))
 
 if __name__ == '__main__':
-    afd = AFNDReader.read("AFND/teste_afnd.afnd")
-    afd_recognition(afd, "abab")
+    from os import path 
+    SETENCE = "a"
+
+    # Leitura de AFD retirar comentario
+    # AF_PATH = path.join("Testes","AFD","reconhecimento_afd.afd")
+    # af = AFDReader.read(AF_PATH)
+
+    # Leitura de AFND retirar comentario
+    AF_PATH = path.join("Testes","AFD","reconhecimento_afnd.afnd")
+    af = AFNDReader.read(AF_PATH)
+
+    af_recognition(af, SETENCE)

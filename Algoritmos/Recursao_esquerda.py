@@ -91,5 +91,10 @@ def is_first_prodution(first, production_list):
     return position_list
             
 if __name__ == '__main__':
-    gr = read("GR/gramatica_teste.gr")
-    print(indirect_recursion(gr))    
+    from os import path
+    GR_PATH = path.join("Testes","GR","recursao_esquerda_1.gr")
+    NEW_GR_FILENAME = "GR_sem_recursão_esquerda"
+    gr = read(GR_PATH)
+    new_gr = indirect_recursion(gr)
+    print(new_gr)
+    new_gr.generate_read_file(NEW_GR_FILENAME)   

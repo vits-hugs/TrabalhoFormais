@@ -1,0 +1,8 @@
+4
+S
+__final_state_
+b,a
+S,a,A
+S,b,__final_state_-B
+A,a,S
+B,b,__final_state_-B
