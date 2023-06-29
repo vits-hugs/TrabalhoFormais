@@ -1,0 +1,5 @@
+c,b,d,a
+S -> AaS@
+S@ -> & | bS@
+A -> dA@
+A@ -> & | aS@cA@

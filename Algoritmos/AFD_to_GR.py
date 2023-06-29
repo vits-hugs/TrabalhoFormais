@@ -34,4 +34,10 @@ def afd_to_gr(afd_file):
     return grammar
 
 if __name__ == '__main__':
-    print(afd_to_gr("AFND/afd.afd"))
+    from os import path
+    PATH_TO_AFD = path.join("Testes","AFD","afd.afd")
+    GR_FILENAME = "gr_de_afd"
+    
+    gr = afd_to_gr(PATH_TO_AFD)
+    print(gr)
+    gr.generate_read_file(GR_FILENAME)

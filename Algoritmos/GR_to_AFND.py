@@ -43,4 +43,10 @@ def gr_to_afnd(afd_file):
     return afnd
 
 if __name__ == '__main__':
-    gr_to_afnd("GR/regular.gr").print()
+    from os import path 
+    GRAMMAR_PATH = path.join("Testes","GR","regular.gr")
+    AFND_FILENAME = "AFND_de_GR" 
+    
+    AFND = gr_to_afnd(GRAMMAR_PATH)
+    print(AFND)
+    AFND.generate_read_file(AFND_FILENAME)

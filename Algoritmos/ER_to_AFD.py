@@ -202,18 +202,27 @@ def make_automata(followTable, letra_num : dict , node: T_Node):
     
     return AFD(Estado_inicial,alfabeto,Transicoes,Estado_final)
 
+def ER_to_AFD(er) -> AFD:
+    er_to_tree = Er_toTree()
+    tree = er_to_tree.create_tree(er)
 
-if __name__ == "__main__":
-    d = ER_parser()
-    d.parseEr_fromFile("ER/teste.txt")
-
-    erTotree = Er_toTree()
-    tree = erTotree.create_tree(d.definitions['4'])
-    print(tree)
-
-    c = FollowPosTable()
-    c.make_table(tree)
+    FPT = FollowPosTable()
+    FPT.make_table(tree)
  
-    erTotree.letra_num['-2'] = '#'
-    automato = make_automata(c.followpos,erTotree.letra_num,tree)
-    print(automato)
+    er_to_tree.letra_num['-2'] = '#'
+    
+    AFD = make_automata(FPT.followpos,er_to_tree.letra_num,tree)
+    return AFD
+if __name__ == "__main__":
+    from os import path 
+    ER_PATH = path.join("Testes","ER","teste.txt")
+    ER_CHOICE = '1'
+    AFD_FILENAME = "AFD_de_ER"
+
+    parser = ER_parser()
+    parser.parseEr_fromFile(ER_PATH)
+    
+    ER = parser.definitions[ER_CHOICE]
+    AFD = ER_to_AFD(ER)
+    print(AFD)
+    AFD.generate_read_file(AFD_FILENAME)

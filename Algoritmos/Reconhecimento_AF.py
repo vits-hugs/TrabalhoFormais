@@ -17,4 +17,7 @@ def afd_recognition(afd_file, string):
     #     print(afnd.transition_table[state].transitions)
 
 if __name__ == '__main__':
-    afd_recognition("AFND/intersection.afd", "bb")
+    from os import path 
+    AFND_PATH = path.join("Testes","AFD","intersection.afd")
+    SETENCE = "bb"
+    afd_recognition(AFND_PATH, SETENCE)
